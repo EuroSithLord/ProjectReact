@@ -9,7 +9,7 @@ using Project_React.Context;
 
 namespace Project_React.Migrations
 {
-    [DbContext(typeof(UserContext))]
+    [DbContext(typeof(IdentityContext))]
     [Migration("20210723130843_Initialise")]
     partial class Initialise
     {

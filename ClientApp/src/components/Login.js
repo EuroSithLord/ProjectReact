@@ -1,11 +1,15 @@
 import { StyleImports, JsonImports } from "./minor/imports";
 import { connect } from "react-redux";
-import React, { useState} from "react";
+import React, { useState, useEffect } from "react";
 import { loginAction } from "../redux/actions/authActions";
 import { loginRequest } from "./minor/authentication/authRequest";
 import { setCookies } from "../redux/actions/appStartActions";
+import { useHistory } from "react-router-dom";
+import { setCookie } from "../auxilliary/cookieFunctions";
 
 const Login = (props) => {
+    const history = useHistory();
+    const { isLoggedIn } = props;
 
     const [state, setState] = useState({
         password: "",
@@ -16,16 +20,20 @@ const Login = (props) => {
         emptyForm: false
     });
 
+    useEffect(() => {
+        let unMounted = false;
+        if (isLoggedIn === true && unMounted === true) history.push("/");
+        else return () => {
+            unMounted = true
+        };
+    }, [history, isLoggedIn])
+
     const handleChange = (event) => {
-        if (state.emptyForm === true) {setState({ ...state, emptyForm: false}); }
+        if (state.emptyForm === true) { setState({ ...state, emptyForm: false }); }
         setState({
             ...state,
             [event.target.name]: event.target.value
         });
-    }
-
-    const handleKeyDown = (event) => {
-        if (event.key === 'Enter') loginRequest(state, setState, props);
     }
 
     const handleSubmit = (event) => {
@@ -38,22 +46,33 @@ const Login = (props) => {
             return;
         }
         event.preventDefault();
-        loginRequest(state, setState, props);
+        loginRequest(state, 
+            (response) => {
+                props.loggingIn(response.data.userName, response.data.name);
+                setCookie({
+                    userName: response.data.userName,
+                    fullName: response.data.name, expireDays: 0.125, isLoggedIn: true
+                });
+                window.location = "/";
+            },
+            () => {
+            setState({ ...state, badCredentials: true });
+        });
     }
 
-    return(
+    return (
         <StyleImports.PageContainer>
             <StyleImports.InnerPageContainer>
                 <StyleImports.AuthFormContainer>
                     <StyleImports.AuthForm onSubmit={handleSubmit} name="loginForm">
                         <StyleImports.FormTitle>{JsonImports.loginTitle}</StyleImports.FormTitle>
-                        { state.badCredentials ?  <StyleImports.FormAlert message={JsonImports.loginBadCredentials} showIcon type="error" /> : 
-                        state.emptyForm ? <StyleImports.FormAlert message={JsonImports.loginEmptyForm} showIcon type="error" /> : null }
+                        {state.badCredentials ? <StyleImports.FormAlert message={JsonImports.loginBadCredentials} showIcon type="error" /> :
+                            state.emptyForm ? <StyleImports.FormAlert message={JsonImports.loginEmptyForm} showIcon type="error" /> : null}
                         <StyleImports.OuterInput badCredentials={state.badCredentials} emptyForm={state.emptyForm}>
                             <StyleImports.InnerInput id="authFormEmail" name="email" type='email' placeholder={JsonImports.loginEmailHint} onChange={handleChange} />
                         </StyleImports.OuterInput>
                         <StyleImports.OuterInput badCredentials={state.badCredentials} emptyForm={state.emptyForm}>
-                            <StyleImports.InnerInput id="registerFormPassword" name="password" type='password' placeholder={JsonImports.loginPWHint} onChange={handleChange} onKeyDown={handleKeyDown}/>
+                            <StyleImports.InnerInput id="registerFormPassword" name="password" type='password' placeholder={JsonImports.loginPWHint} onChange={handleChange}/>
                         </StyleImports.OuterInput>
                         <StyleImports.InlineFormContainer>
                             <StyleImports.SubmitButton onClick={handleSubmit}>{JsonImports.loginSubmit}</StyleImports.SubmitButton>
@@ -69,7 +88,8 @@ const Login = (props) => {
 const mapStateToProps = (state) => {
     return {
         userName: state.userName,
-        fullName: state.fullName
+        fullName: state.fullName,
+        isLoggedIn: state.isLoggedIn
     }
 }
 

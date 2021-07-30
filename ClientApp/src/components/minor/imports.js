@@ -1,11 +1,41 @@
-import { registerFormAuthLink, registerFormSubmit, registerFormEmailHint, registerFormFirstNameHint, registerFormLastNameHint,
+import React from 'react';
+import {
+    registerFormAuthLink, registerFormSubmit, registerFormEmailHint, registerFormFirstNameHint, registerFormLastNameHint,
     registerFormPasswordHint, registerFormTitle, registerErrorEmptyForm, registerFormPasswordConfirmHint,
-    registerErrorBadPasswordConfirm, registerSuccessDetails, registerNotificationSuccess } from "../../json/appFeedback.json";
-import { loginErrorBadCredentials, loginErrorEmptyForm, loginFormTitle, loginFormSubmit, loginFormEmailHint, 
-    loginFormPasswordHint, authFormRegisterButton } from "../../json/appFeedback.json";
-import { PageContainer, InnerPageContainer, AuthFormContainer, AuthForm, FormTitle, OuterInput, InnerInput, 
-    SubmitButton, InlineFormContainer, AuthFormLink, RegisterForm, FormAlert, RegisterOuterInput } from "./authentication/authStyles";
-import { notification } from "antd";
+    registerErrorBadPasswordConfirm, registerSuccessDetails, registerNotificationSuccess, registerNotificationFail
+} from "../../json/appFeedback.json";
+import {
+    loginErrorBadCredentials, loginErrorEmptyForm, loginFormTitle, loginFormSubmit, loginFormEmailHint,
+    loginFormPasswordHint, authFormRegisterButton
+} from "../../json/appFeedback.json";
+import {
+    navbarAppTitle, navbarAuthButton, navbarDashboardButton, navbarHomeButton
+} from "../../json/appFeedback.json";
+import {
+    menuItemAddRole, menuItemUserInbox, menuItemUsersPanel, menuItemDeleteRole
+} from '../../json/appFeedback.json';
+import {
+    createRoleFormLabel, createRoleFormReset, createRoleFormSubmit, createRoleFormTitle, createRoleFormPlaceholder,
+    createRoleFail, createRoleSuccess, deleteRoleFormLabel, deleteRoleFormReset, deleteRoleFormSubmit, deleteRoleFormTitle, deleteRoleFormPlaceholder,
+    deleteRoleFail, deleteRoleSuccess
+} from '../../json/appFeedback.json';
+import {
+    userPanelSubmit, userPanelTableRolesSelectPlaceholder
+} from '..//../json/appFeedback.json';
+import { loadingHint } from '../../json/appFeedback.json';
+import {
+    PageContainer, InnerPageContainer, AuthFormContainer, AuthForm, FormTitle, OuterInput, InnerInput,
+    SubmitButton, InlineFormContainer, AuthFormLink, RegisterForm, FormAlert, RegisterOuterInput
+} from "./authentication/authStyles";
+import { 
+    UserOutlined, MailOutlined, ControlOutlined, UserAddOutlined, UserDeleteOutlined, LoadingOutlined
+} from "@ant-design/icons";
+import { 
+    DocumentContainer, ContentContainer, FormContainer, PageTitle, LayoutInnerContainer, TableContainer
+} from "./appStyles";
+import { notification, Spin } from "antd";
+
+const loadIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 export class JsonImports {
     static badPasswordConfirm = registerErrorBadPasswordConfirm;
@@ -20,6 +50,7 @@ export class JsonImports {
     static registerPasswordConfirm = registerFormPasswordConfirmHint;
     static registerSuccessDetails = registerSuccessDetails;
     static registerNotificationSuccess = registerNotificationSuccess;
+    static registerNotificationFail = registerNotificationFail;
 
     static loginBadCredentials = loginErrorBadCredentials;
     static loginEmptyForm = loginErrorEmptyForm;
@@ -28,6 +59,37 @@ export class JsonImports {
     static loginEmailHint = loginFormEmailHint;
     static loginPWHint = loginFormPasswordHint;
     static loginRegisterBtn = authFormRegisterButton;
+
+    static appTitle = navbarAppTitle;
+    static authButton = navbarAuthButton;
+    static dashboardButton = navbarDashboardButton;
+    static homeButton = navbarHomeButton;
+
+    static addRole = menuItemAddRole;
+    static userInbox = menuItemUserInbox;
+    static usersPanel = menuItemUsersPanel;
+    static deleteRole = menuItemDeleteRole;
+
+    static createRoleLabel = createRoleFormLabel;
+    static createRoleReset = createRoleFormReset;
+    static createRoleSubmit = createRoleFormSubmit;
+    static createRoleTitle = createRoleFormTitle;
+    static createRolePlaceholder = createRoleFormPlaceholder;
+    static createRoleFail = createRoleFail;
+    static createRoleSuccess = createRoleSuccess;
+
+    static deleteRoleLabel = deleteRoleFormLabel;
+    static deleteRoleReset = deleteRoleFormReset;
+    static deleteRoleSubmit = deleteRoleFormSubmit;
+    static deleteRoleTitle = deleteRoleFormTitle;
+    static deleteRolePlaceholder = deleteRoleFormPlaceholder;
+    static deleteRoleFail = deleteRoleFail;
+    static deleteRoleSuccess = deleteRoleSuccess;
+
+    static loadingHint = loadingHint;
+
+    static userPanelSubmit = userPanelSubmit;
+    static userPanelPlaceholder = userPanelTableRolesSelectPlaceholder;
 }
 
 export class StyleImports {
@@ -45,4 +107,21 @@ export class StyleImports {
     static FormAlert = FormAlert;
     static RegisterOuterInput = RegisterOuterInput;
     static Notification = notification;
+    static DocumentContainer = DocumentContainer;
+    static ContentContainer = ContentContainer;
+    static FormContainer = FormContainer;
+    static PageTitle = PageTitle;
+    static ContainerInnerContainer = LayoutInnerContainer;
+    static TableContainer = TableContainer;
+    static LoadingSpin = Spin;
+    static InlineContainer = InlineFormContainer;
+}
+
+export class IconImports {
+    static UserIcon = UserOutlined;
+    static UserAddIcon = UserAddOutlined;
+    static ControlIcon = ControlOutlined;
+    static MailIcon = MailOutlined;
+    static UserDeleteIcon = UserDeleteOutlined;
+    static LoadingIcon = loadIcon;
 }

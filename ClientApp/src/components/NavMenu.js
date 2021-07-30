@@ -5,12 +5,12 @@ import { connect } from 'react-redux';
 import { setCookies } from '../redux/actions/appStartActions';
 import Cookies from 'js-cookie';
 import { logOutAction } from '../redux/actions/authActions';
-import { logoutButtonTitle,  navbarAppTitle, navbarHomeButton} from '../json/appFeedback.json';
+import { logoutButtonTitle, navbarAppTitle, navbarHomeButton } from '../json/appFeedback.json';
 
 class NavMenu extends Component {
   static displayName = NavMenu.name;
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.toggleNavbar = this.toggleNavbar.bind(this);
@@ -20,21 +20,21 @@ class NavMenu extends Component {
     };
   }
 
-  toggleNavbar () {
+  toggleNavbar() {
     this.setState({
       collapsed: !this.state.collapsed
     });
   }
 
   handleLogOut = () => {
-    Cookies.remove('user', {path: '/'});
+    Cookies.remove('user', { path: '/' });
     this.props.logOut();
   }
 
-  render () {
+  render() {
     const toggle = () => {
-      if (this.state.dropdownOpen === false) this.setState({...this.state, dropdownOpen: true});
-      else this.setState({...this.state, dropdownOpen: false});
+      if (this.state.dropdownOpen === false) this.setState({ ...this.state, dropdownOpen: true });
+      else this.setState({ ...this.state, dropdownOpen: false });
     }
     return (
       <header>
@@ -49,13 +49,17 @@ class NavMenu extends Component {
                 </NavItem>
                 <Dropdown nav isOpen={this.state.dropdownOpen} toggle={toggle}>
                   <DropdownToggle nav caret className="text-dark">
-                    {this.props.isLoggedIn === "true"? this.props.fullName : "Login"}
+                    {this.props.isLoggedIn === "true" ? this.props.fullName : "Login"}
                   </DropdownToggle>
                   <DropdownMenu>
-                    <DropdownItem><NavLink tag={Link} className="text-dark" to={this.props.isLoggedIn === "true" ? "/dashboard" : "/"}>
-                      {this.props.isLoggedIn === "true"? this.props.fullName : "Login"}</NavLink>
+                    <DropdownItem style={{ display: "flex", justifyContent: "center", outline: "none", background: "transparent" }}>
+                      <NavLink tag={Link} style={{ textAlign: "center" }} className="text-dark" to={this.props.isLoggedIn === "true" ? "/dashboard" : "/"}>
+                        {this.props.isLoggedIn === "true" ? this.props.fullName : "Login"}
+                      </NavLink>
                     </DropdownItem>
-                    <DropdownItem onClick={this.handleLogOut}>{logoutButtonTitle}</DropdownItem>
+                    <DropdownItem onClick={this.handleLogOut} style={{ textAlign: "center", outline: "none", background: "transparent", color: "#343A40" }}>
+                      {logoutButtonTitle}
+                    </DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
               </ul>
@@ -76,9 +80,9 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state) => {
   return {
-      isLoggedIn: state.isLoggedIn,
-      fullName: state.fullName,
-      userName: state.userName
+    isLoggedIn: state.isLoggedIn,
+    fullName: state.fullName,
+    userName: state.userName
   }
 }
 

@@ -8,7 +8,7 @@ using Project_React.Context;
 
 namespace Project_React.Migrations
 {
-    [DbContext(typeof(UserContext))]
+    [DbContext(typeof(IdentityContext))]
     partial class UserContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

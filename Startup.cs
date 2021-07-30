@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Project_React.Interfaces;
+using Project_React.Controllers.Auth;
 
 namespace Project_React
 {
@@ -48,17 +50,15 @@ namespace Project_React
         {
             services.AddControllersWithViews();
 
-            services.AddDbContext<UserContext>(options =>
+            services.AddDbContext<IdentityContext>(options =>
             {
                 if (!options.IsConfigured) options.UseSqlServer(Configuration.GetConnectionString("ProjectReact"));
             });
 
-            //services.AddIdentityCore<User>().AddEntityFrameworkStores<UserContext>();
-
             var builder = services.AddIdentityCore<User>();
             var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
             identityBuilder.AddRoles<IdentityRole>();
-            identityBuilder.AddEntityFrameworkStores<UserContext>();
+            identityBuilder.AddEntityFrameworkStores<IdentityContext>();
             identityBuilder.AddSignInManager<SignInManager<User>>();
             identityBuilder.AddDefaultTokenProviders();
 
@@ -67,26 +67,25 @@ namespace Project_React
                 configuration.RootPath = "ClientApp/build";
             });
 
-            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
-            //    authenticationScheme: JwtBearerDefaults.AuthenticationScheme,
-            //    configureOptions: options => {
-            //        options.IncludeErrorDetails = true;
-            //        options.TokenValidationParameters = new TokenValidationParameters()
-            //        {
-            //            IssuerSigningKey = new SymmetricSecurityKey(
-            //                Encoding.UTF32.GetBytes(Configuration["Jwt:PrivateKey"])
-            //            ),
-            //            ValidAudience = "ctifclientapp",
-            //            ValidIssuer = "ctifserverapp",
-            //            RequireExpirationTime = true,
-            //            RequireAudience = true,
-            //            ValidateIssuer = true,
-            //            ValidateLifetime = true,
-            //            ValidateAudience = true,
-            //        };
-            //    });
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                x.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddCookie("Identity.Application").AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF32.GetBytes(Configuration.GetSection("Jwt:PrivateKey").Value)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(x => x.LoginPath="/");
+            services.AddSingleton<IJwtHandlerAuth>(new JwtHandlerAuth(Configuration.GetSection("Jwt:PrivateKey").Value));
         }
 
         /// <summary>
