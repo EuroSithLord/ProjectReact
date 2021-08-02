@@ -1,94 +1,78 @@
 import React, { useEffect, useState } from 'react';
 import { IconImports, JsonImports, StyleImports } from './minor/imports';
-import { Button, Table, Select } from 'antd';
-import { getUserList } from './minor/userPanelRequests';
-import { getRoleListRequest } from './minor/roleRequest';
-
-const getRoles = (func) => {};
+import { Button, Table, Modal, Form, Input, Select } from 'antd';
+import { getUsersAndRoles } from './minor/usersPanel/userPanelRequests';
+import { connect } from "react-redux";
+import { usersTableColumns } from './minor/usersPanel/usersTableColumns';
+import { event } from 'jquery';
 
 const UserPanel = (props) => {
-    const get = () => {
-        console.log("test");
-        return  [
-            {
-                title: 'Nume',
-                dataIndex: 'name',
-                key: 'name',
-                colspan: 1,
-                rowspan: 0,
-                /*filters: state.users.map(user => {
-                    const nameParts = user.name.Split(" ");
-                    name
-                }),*/
-                onFilter: (value, record) => record.name.indexOf(value) === 0,
-                sorter: (a, b) => a.name < b.name,
-                sortDirections: ['descend', 'ascend'],
-            },
-            {
-                title: 'Email',
-                dataIndex: 'email',
-                key: 'email',
-                colspan: 0,
-                rowspan: 0,
-                onFilter: (value, record) => record.name.indexOf(value) === 0,
-                sorter: (a, b) => a.email < b.email,
-                sortDirections: ['descend', 'ascend'],
-            },
-            {
-                title: 'Nume utilizator',
-                dataIndex: 'userName',
-                key: 'userName',
-                colspan: 0,
-                rowspan: 0,
-                onFilter: (value, record) => record.name.indexOf(value) === 0,
-                sorter: (a, b) => a.userName < b.userName,
-                sortDirections: ['descend', 'ascend'],
-            },
-            {
-                title: 'Rol utilizator',
-                dataIndex: 'role',
-                key: 'role',
-                colspan: 0,
-                rowspan: 0,
-                render: roles => (
-                    <Select 
-                        showSearch
-                        placeholder={JsonImports.userPanelPlaceholder}
-                        optionFilterProp="roles"
-                        filterOption={(input, option) => option.roles.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                    >
-                    </Select>
-                )
-            }
-        ]
-    }
-
-    const columns = get();
+    const { Option } = Select;
+    const [form] = Form.useForm();
     const [state, setState] = useState({
         loading: true,
         users: [],
-        roles: []
+        roles: [],
+        userEditMode: false,
+        editedUser: {},
+        userToEdit: {}
     });
 
     useEffect(() => {
         // TODO: cleanup
-        // TODO: two request same time 
-        getUserList((response) => {
-            const users = response.data.map((row, index) => ({
-                key: index,
-                name: row.name,
-                userName: row.userName,
-                email: row.email,
-                role: row.role
-            }));
-            setState({
-                ...state,
-                loading: false,
-                users: users
+        let unMounted = false;
+        //if (unMounted === false && props.isLoggedIn === true) {
+            getUsersAndRoles((responses) => {
+                const users = responses[0].data.map((row, index) => ({
+                    key: index,
+                    name: row.name,
+                    userName: row.userName,
+                    email: row.email,
+                    role: row.role === null ? JsonImports.userPanelNoRole : row.role
+                }));
+                setState({
+                    ...state,
+                    loading: false,
+                    users: users,
+                    roles: responses[1].data
+                });
+            }, (exceptions) => {
+                StyleImports.Notification["error"]({
+                    message: JsonImports.userPanelError,
+                    description: exceptions.response.data
+                })
             });
-        });
-        
+        //}
+        /*else return () => {
+            unMounted = true;
+        }*/
     }, []);
+
+    const handleEditMode = (event) => {
+        const node = parseInt(event.target.parentElement.parentElement.parentElement.dataset.rowKey);
+        const user = state.users.filter(user => user.key === node);
+        setState({
+            ...state,
+            userEditMode: true,
+            userToEdit: user[0]
+        });
+    }
+
+    const handleEditFinish = () => {
+        setState({
+            ...state, 
+            userEditMode: false
+        });
+    }
+
+    const handleEditCancel = () => {
+        setState({
+            ...state, 
+            userEditMode: false
+        });
+    }
+
+    const columns = usersTableColumns(state, handleEditMode, handleEditFinish);
 
     return(
         <>
@@ -96,20 +80,75 @@ const UserPanel = (props) => {
             <StyleImports.TableContainer>
                 {
                     !state.loading ? 
-                    <Table columns={columns} dataSource={state.users}/> : null
+                    <>
+                        <StyleImports.PageTitle>{ JsonImports.userPanelTitle }</StyleImports.PageTitle>
+                        <Table rowKey={record => record.key} columns={columns} dataSource={state.users}/>
+                    </> : null
                 }
-                {
-                    !state.loading ?
-                    <StyleImports.InlineContainer>
-                        <Button type="primary">
-                            { JsonImports.userPanelSubmit }
-                        </Button>
-                    </StyleImports.InlineContainer> :
-                    null
-                }
+                
             </StyleImports.TableContainer>
+            <Modal
+                title={JsonImports.userPanelModalTitle}
+                visible={state.userEditMode}
+                onOk={handleEditFinish}
+                onCancel={handleEditCancel}
+                okText={JsonImports.userPanelSaveEdit}
+                cancelText={JsonImports.userPanelCancelEdit}
+            >
+                <Form 
+                    layout="vertical" 
+                    onFinish={handleEditFinish} 
+                    form={form} 
+                    initialValues={{
+                        ["oldName"]: state.userToEdit.name,
+                        ["oldEmail"]: state.userToEdit.email,
+                        ["oldUserName"]: state.userToEdit.userName,
+                        ["oldRole"]: state.userToEdit.role
+                    }}
+                >
+                    <Form.Item name="oldName" label={JsonImports.userPanelOldName}>
+                        <Input  disabled/>
+                    </Form.Item>
+                    <Form.Item name="newName" label={JsonImports.userPanelNewName}>
+                        <Input />
+                    </Form.Item>
+                    <Form.Item name="oldEmail" label={JsonImports.userPanelOldEmail}>
+                        <Input  disabled/>
+                    </Form.Item>
+                    <Form.Item name="newEmail" label={JsonImports.userPanelNewEmail}>
+                        <Input />
+                    </Form.Item>
+                    <Form.Item name="oldUserName" label={JsonImports.userPanelOldUserName}>
+                        <Input  disabled/>
+                    </Form.Item>
+                    <Form.Item name="newUserName" label={JsonImports.userPanelNewUserName}>
+                        <Input />
+                    </Form.Item>
+                    <Form.Item name="oldRole" label={JsonImports.userPanelOldRole}>
+                        <Input  disabled/>
+                    </Form.Item>
+                    <Form.Item name="newRole" label={JsonImports.userPanelNewRole}>
+                        <Select
+                            showSearch
+                            placeholder={JsonImports.userPanelPlacehold}
+                        >
+                            {  
+                                state.roles.map(role => {
+                                    return <Option key={role.name}>{role.name}</Option>
+                                })
+                            }
+                        </Select>
+                    </Form.Item>
+                </Form>
+            </Modal>
         </>
     );
 }
 
-export default UserPanel;
+const mapStateToProps = (state) => {
+    return {
+        isLoggedIn: state.isLoggedIn
+    }
+}
+
+export default connect(mapStateToProps)(UserPanel);

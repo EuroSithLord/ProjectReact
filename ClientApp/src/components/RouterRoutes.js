@@ -10,10 +10,10 @@ export const PrivateRoute = ({component: Component, isLoggedIn, ...rest}) => {
     )
 }
 
-export const PublicRoute = ({component: Component, isLoggedIn, componentProps, ...rest}) => {
+export const PublicRoute = ({component: Component, isLoggedIn, ...rest}) => {
     return(
         <Route {...rest} render={ props => (
-            !isLoggedIn && role === admin ? <Component isLoggedIn={isLoggedIn} {...props} /> :
+            !isLoggedIn ? <Component isLoggedIn={isLoggedIn} {...props} /> :
             <Redirect to="/" />
         )} />
     )

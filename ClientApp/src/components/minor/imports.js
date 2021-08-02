@@ -20,7 +20,9 @@ import {
     deleteRoleFail, deleteRoleSuccess
 } from '../../json/appFeedback.json';
 import {
-    userPanelSubmit, userPanelTableRolesSelectPlaceholder
+    userPanelSubmit, userPanelTableRolesSelectPlaceholder, userPanelEditButton, userPanelSaveEditButton, userPanelErrorTitle, errorUserNoRole, userPanelTitle,
+    userPanelModalTitle, userPanelCancelEdit, userPanelModalNewEmailHint, userPanelModalNewNameHint, userPanelModalNewUserNameHint, userPanelModalNewRoleHint,
+    userPanelModalOldEmailHint, userPanelModalOldNameHint, userPanelModalOldRoleHint, userPanelModalOldUserNameHint, userPanelModalUserSelectPlaceholder
 } from '..//../json/appFeedback.json';
 import { loadingHint } from '../../json/appFeedback.json';
 import {
@@ -90,6 +92,22 @@ export class JsonImports {
 
     static userPanelSubmit = userPanelSubmit;
     static userPanelPlaceholder = userPanelTableRolesSelectPlaceholder;
+    static userPanelEdit = userPanelEditButton;
+    static userPanelSaveEdit = userPanelSaveEditButton;
+    static userPanelError = userPanelErrorTitle;
+    static userPanelNoRole = errorUserNoRole;
+    static userPanelTitle = userPanelTitle;
+    static userPanelModalTitle = userPanelModalTitle;
+    static userPanelCancelEdit = userPanelCancelEdit;
+    static userPanelNewEmail = userPanelModalNewEmailHint;
+    static userPanelNewName = userPanelModalNewNameHint;
+    static userPanelNewUserName = userPanelModalNewUserNameHint;
+    static userPanelNewRole = userPanelModalNewRoleHint;
+    static userPanelOldEmail = userPanelModalOldEmailHint;
+    static userPanelOldName = userPanelModalOldNameHint;
+    static userPanelOldUserName = userPanelModalOldUserNameHint;
+    static userPanelOldRole = userPanelModalOldRoleHint;
+    static userPanelUserPlacehold = userPanelModalUserSelectPlaceholder;
 }
 
 export class StyleImports {

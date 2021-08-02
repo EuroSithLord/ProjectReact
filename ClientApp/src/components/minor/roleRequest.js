@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const createRoleRequest = (state, onSucceed, onFail) => {
-    axios.post("api/roles/createrole", { "name": state.name })
+    axios.post("api/roles", { "name": state.name })
         .then((response) => {
             if (response.status === 200) onSucceed(response);
         }).catch((exception) => {
@@ -10,7 +10,7 @@ export const createRoleRequest = (state, onSucceed, onFail) => {
 }
 
 export const deleteRoleRequest = (state, onSucceed, onFail) => {
-    axios.post("api/roles/deleterole", { "name": state.name })
+    axios.delete("api/roles", { "name": state.name })
         .then((response) => {
             if (response.status === 200) onSucceed(response);
         }).catch((exception) => {
@@ -19,7 +19,7 @@ export const deleteRoleRequest = (state, onSucceed, onFail) => {
 }
 
 export const getRoleListRequest = (onSucceed) => {
-    axios.get("api/roles/getroles")
+    axios.get("api/roles")
         .then((response) =>{
             console.log(response.data);
             onSucceed(response);

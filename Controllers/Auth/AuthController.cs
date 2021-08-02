@@ -107,7 +107,7 @@ namespace Project_React.Controllers
         /// </summary>
         /// <returns>   Ok is registration was successful or BadRequest if unseccessful.</returns>
         [AllowAnonymous]
-        [HttpPost("{register}")]
+        [HttpPost("registration")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         async public Task<IActionResult> RegisterPost(RegisterUser registerUser)

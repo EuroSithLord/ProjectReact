@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Project_React.Context;
 using Project_React.Controllers.Users.ReturnModels;
 using Project_React.Models;
+using Project_React.Resources;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,36 +15,30 @@ namespace Project_React.Controllers.Users
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<User> _userManager;
         private readonly IdentityContext _context;
 
-        public UsersController(RoleManager<IdentityRole> roleManager, UserManager<User> userManager, IdentityContext context)
+        public UsersController(UserManager<User> userManager, IdentityContext context)
         {
-            _roleManager = roleManager;
             _userManager = userManager;
             _context = context;
         }
 
-        [HttpGet("getusers")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult GetUsers()
         {
-            var userList = new List<GetUsersModel>();
             var userDbList = _userManager.Users.ToList();
 
-            foreach (var user in userDbList)
-            {
-                var newUser = new GetUsersModel
-                {
-                    Name = $"{user.FirstName} {user.LastName}",
-                    Email = user.Email,
-                    UserName = user.UserName,
-                    
-                };
+            if (userDbList is null) return BadRequest(AppResources.UsersDoNotExist);
 
-                userList.Add(newUser);
-            }
+            var userList = userDbList.Select(user => new GetUsersModel
+            {
+                Name = $"{user.FirstName} {user.LastName}",
+                UserName = user.UserName,
+                Email = user.Email
+            });
 
             return Ok(userList);
         }

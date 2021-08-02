@@ -1,14 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Project_React.Context;
 using Project_React.Controllers.Users.IncomingModels;
 using Project_React.Models;
 using Project_React.Resources;
-using Project_React.Context;
-using Microsoft.AspNetCore.Authorization;
-using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Project_React.Controllers.Users
 {
@@ -36,7 +34,7 @@ namespace Project_React.Controllers.Users
         ///     HTTP Get request method.
         /// </summary>
         /// <returns>All roles in application.</returns>
-        [HttpGet("getroles")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult GetRoles()
@@ -63,7 +61,7 @@ namespace Project_React.Controllers.Users
         ///     Gets the name of the role and returns request status
         ///     and a message.
         /// </returns>
-        [HttpPost("createrole")]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         async public Task<IActionResult> CreateRole(RoleModel roleModel)
@@ -92,7 +90,7 @@ namespace Project_React.Controllers.Users
         ///     Gets the name of the role and returns request status
         ///     and a message.
         /// </returns>
-        [HttpPost("deleterole")]
+        [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         async public Task<IActionResult> DeleteRole(RoleModel roleModel)

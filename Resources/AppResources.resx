@@ -156,4 +156,7 @@
   <data name="UserRegistrationImpossible" xml:space="preserve">
     <value>Înregistrarea utilizatorului imposibilă. Încercați din nou.</value>
   </data>
+  <data name="UsersDoNotExist" xml:space="preserve">
+    <value>Nu există utilizatori.</value>
+  </data>
 </root>

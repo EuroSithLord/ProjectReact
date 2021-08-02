@@ -176,5 +176,14 @@ namespace Project_React.Resources {
                 return ResourceManager.GetString("UserRegistrationImpossible", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nu există utilizatori..
+        /// </summary>
+        internal static string UsersDoNotExist {
+            get {
+                return ResourceManager.GetString("UsersDoNotExist", resourceCulture);
+            }
+        }
     }
 }

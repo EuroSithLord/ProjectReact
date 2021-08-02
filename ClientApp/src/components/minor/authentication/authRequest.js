@@ -10,7 +10,7 @@ export const loginRequest = (state, onSucceed, onCatch) => {
 }
 
 export const registerRequest = (state, setState) => {
-    axios.post("api/auth/register", {
+    axios.post("api/auth/registration", {
         "email": state.email, "password": state.password, "firstName": state.firstName, "lastName": state.lastName
     }).then((response) => {
         if (response.status === 200) {
