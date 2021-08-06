@@ -113,8 +113,10 @@ namespace Project_React.Controllers
         async public Task<IActionResult> RegisterPost(RegisterUser registerUser)
         {
             if (registerUser is null) return BadRequest(AppResources.NullUser);
-            // move if to var
-            if (_context.Users.FirstOrDefault(user => user.Email == registerUser.Email) != null) return BadRequest(AppResources.UserAlreadyRegistered);
+
+            var user = _context.Users.FirstOrDefault(user => user.Email == registerUser.Email);
+
+            if ( user != null) return BadRequest(AppResources.UserAlreadyExists);
 
             var hasher = new PasswordHasher<RegisterUser>();
             var hash = hasher.HashPassword(registerUser, registerUser.Password);

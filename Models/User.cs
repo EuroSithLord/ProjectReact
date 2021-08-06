@@ -10,8 +10,6 @@ namespace Project_React.Models
     /// </summary>
     public class User : IdentityUser
     {
-        [Key]
-        public Guid Id { get; set; }
         /// <summary>
         ///     Property for reading and writing the first name.
         /// </summary>

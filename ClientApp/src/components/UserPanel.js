@@ -1,34 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { IconImports, JsonImports, StyleImports } from './minor/imports';
-import { Button, Table, Modal, Form, Input, Select } from 'antd';
-import { getUsersAndRoles } from './minor/usersPanel/userPanelRequests';
+import { Button, Table, Modal } from 'antd';
+import { getUsersAndRoles, removeUser, createUser, editUser, getUserDetails } from './minor/usersPanel/userPanelRequests';
 import { connect } from "react-redux";
 import { usersTableColumns } from './minor/usersPanel/usersTableColumns';
-import { event } from 'jquery';
+import { ModalEditForm, ModalCreateForm } from './minor/usersPanel/userPanelModalForm';
+import { UserDetailsCard } from './minor/usersPanel/userPanelCards';
 
 const UserPanel = (props) => {
-    const { Option } = Select;
-    const [form] = Form.useForm();
     const [state, setState] = useState({
         loading: true,
         users: [],
         roles: [],
         userEditMode: false,
+        userCreateMode: false,
+        userDetailsMode: false,
         editedUser: {},
-        userToEdit: {}
+        userSelected: {},
+        editUserFormEmpty: false,
+        createUserFormEmpty: false
     });
 
     useEffect(() => {
-        // TODO: cleanup
         let unMounted = false;
-        //if (unMounted === false && props.isLoggedIn === true) {
+        if (unMounted === false && props.isLoggedIn === "true") {
             getUsersAndRoles((responses) => {
                 const users = responses[0].data.map((row, index) => ({
                     key: index,
                     name: row.name,
                     userName: row.userName,
                     email: row.email,
-                    role: row.role === null ? JsonImports.userPanelNoRole : row.role
+                    id: row.id
+                    //role: row.result.role.length === 0 ? JsonImports.userPanelNoRole : row.result.role
                 }));
                 setState({
                     ...state,
@@ -42,26 +45,133 @@ const UserPanel = (props) => {
                     description: exceptions.response.data
                 })
             });
-        //}
-        /*else return () => {
+        }
+        return () => {
             unMounted = true;
-        }*/
+        }
     }, []);
 
-    const handleEditMode = (event) => {
-        const node = parseInt(event.target.parentElement.parentElement.parentElement.dataset.rowKey);
-        const user = state.users.filter(user => user.key === node);
-        setState({
-            ...state,
-            userEditMode: true,
-            userToEdit: user[0]
+    const handleDetailsMode = (key) => {
+        const user = state.users.find(user => user.key === key);
+        getUserDetails(user, (response) => {
+            setState({
+                ...state,
+                userSelected: response.data,
+                userDetailsMode: true
+            })
+        }, (exception) => {
+            console.log(exception.response);
         });
     }
 
-    const handleEditFinish = () => {
+    const handleEditMode = (key) => {
+        const user = state.users.find(user => user.key === key);
+        setState({
+            ...state,
+            userSelected: user,
+            userEditMode: true,
+        });
+    }
+
+    const handleRemoveUser = (key) => {
+        const user = state.users.find(user => user.key === key);
+        removeUser(user, (response) => {
+            const users = response.data.users.map((row, index) => ({
+                key: index,
+                name: row.result.name,
+                userName: row.result.userName,
+                email: row.result.email,
+                role: row.result.role.length === 0 ? JsonImports.userPanelNoRole : row.result.role
+            }));
+            setState({
+                ...state,
+                users: users,
+            });
+            StyleImports.Notification["success"]({
+                message: JsonImports.userPanelRemoveSuccess,
+                description: response.data.message
+            });
+        }, (exception) => {
+            StyleImports.Notification["error"]({
+                message: JsonImports.userPanelRemoveError,
+                description: exception.response.data
+            });
+        })
+    }
+
+    const handleEditFinish = (values) => {
+        const properties = [values.firstName, values.lastName, values.email, values.userName, values.roles];
+        if (properties.some(property => property !== undefined)) {
+            editUser(state.userSelected, values, (response) => {
+                const users = response.data.users.map((row, index) => ({
+                    key: index,
+                    name: row.result.name,
+                    userName: row.result.userName,
+                    email: row.result.email,
+                    role: row.result.role.length === 0 ? JsonImports.userPanelNoRole : row.result.role,
+                    id: row.result.id
+                }));
+                setState({
+                    ...state,
+                    users: users,
+                    userEditMode: false
+                });
+                StyleImports.Notification["success"]({
+                    message: JsonImports.userPanelEditSuccess,
+                    description: response.data.message
+                });
+            }, (exception) => {
+                StyleImports.Notification["error"]({
+                message: JsonImports.userPanelEditError,
+                description: exception.response.data
+            });
+            })
+            return;
+        }
+        setState({
+            ...state,
+            editUserFormEmpty: true
+        });
+    }
+
+    const handleCreateFinish = (values) => {
+        const properties = [values.firstName, values.lastName, values.email, values.role, values.password];
+        if (properties.every(property => property !== undefined)) {
+            createUser(values, (response) => {
+                const users = response.data.users.map((row, index) => ({
+                    key: index,
+                    name: row.result.name,
+                    userName: row.result.userName,
+                    email: row.result.email,
+                    role: row.result.role.length === 0 ? JsonImports.userPanelNoRole : row.result.role
+                }));
+                setState({
+                    ...state,
+                    users: users,
+                    userCreateMode: false
+                });
+                StyleImports.Notification["success"]({
+                    message: JsonImports.userPanelCreateUserSuccess,
+                    description: response.data.message
+                });
+            }, (exception) => {
+                StyleImports.Notification["error"]({
+                    message: JsonImports.userPanelCreateUserError,
+                    description: exception.response.data.message
+                });
+            });
+            return;
+        }
+        setState({
+            ...state,
+            createUserFormEmpty: true
+        });
+    }
+
+    const handleCreateCancel = () => {
         setState({
             ...state, 
-            userEditMode: false
+            userCreateMode: false
         });
     }
 
@@ -72,7 +182,21 @@ const UserPanel = (props) => {
         });
     }
 
-    const columns = usersTableColumns(state, handleEditMode, handleEditFinish);
+    const handleDetailsCancel = () => {
+        setState({
+            ...state,
+            userDetailsMode: false
+        })
+    }
+
+    const handleOpenCreate = () => {
+        setState({
+            ...state,
+            userCreateMode: true
+        });
+    }
+
+    const columns = usersTableColumns(handleEditMode, handleRemoveUser, handleDetailsMode);
 
     return(
         <>
@@ -82,64 +206,55 @@ const UserPanel = (props) => {
                     !state.loading ? 
                     <>
                         <StyleImports.PageTitle>{ JsonImports.userPanelTitle }</StyleImports.PageTitle>
-                        <Table rowKey={record => record.key} columns={columns} dataSource={state.users}/>
+                        <Table rowKey={record => record.key} columns={columns} dataSource={state.users} style={{overflow: "auto"}}/>
+                        <Button type="primary" onClick={handleOpenCreate}>{ JsonImports.userPanelAddUser }</Button>
                     </> : null
                 }
                 
             </StyleImports.TableContainer>
             <Modal
-                title={JsonImports.userPanelModalTitle}
-                visible={state.userEditMode}
-                onOk={handleEditFinish}
-                onCancel={handleEditCancel}
-                okText={JsonImports.userPanelSaveEdit}
-                cancelText={JsonImports.userPanelCancelEdit}
+                title={state.userSelected.name}
+                visible={state.userDetailsMode}
+                onCancel={handleDetailsCancel}
+                onOk={handleDetailsCancel}
+                destroyOnClose
             >
-                <Form 
-                    layout="vertical" 
-                    onFinish={handleEditFinish} 
-                    form={form} 
-                    initialValues={{
-                        ["oldName"]: state.userToEdit.name,
-                        ["oldEmail"]: state.userToEdit.email,
-                        ["oldUserName"]: state.userToEdit.userName,
-                        ["oldRole"]: state.userToEdit.role
-                    }}
-                >
-                    <Form.Item name="oldName" label={JsonImports.userPanelOldName}>
-                        <Input  disabled/>
-                    </Form.Item>
-                    <Form.Item name="newName" label={JsonImports.userPanelNewName}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name="oldEmail" label={JsonImports.userPanelOldEmail}>
-                        <Input  disabled/>
-                    </Form.Item>
-                    <Form.Item name="newEmail" label={JsonImports.userPanelNewEmail}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name="oldUserName" label={JsonImports.userPanelOldUserName}>
-                        <Input  disabled/>
-                    </Form.Item>
-                    <Form.Item name="newUserName" label={JsonImports.userPanelNewUserName}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name="oldRole" label={JsonImports.userPanelOldRole}>
-                        <Input  disabled/>
-                    </Form.Item>
-                    <Form.Item name="newRole" label={JsonImports.userPanelNewRole}>
-                        <Select
-                            showSearch
-                            placeholder={JsonImports.userPanelPlacehold}
-                        >
-                            {  
-                                state.roles.map(role => {
-                                    return <Option key={role.name}>{role.name}</Option>
-                                })
-                            }
-                        </Select>
-                    </Form.Item>
-                </Form>
+                <UserDetailsCard user={state.userSelected} />
+            </Modal>
+            <Modal
+                title={JsonImports.userPanelEditModalTitle}
+                visible={state.userEditMode}
+                onCancel={handleEditCancel}
+                footer={null}
+                destroyOnClose
+            >
+                {
+                    state.editUserFormEmpty ?
+                    <StyleImports.GlobalFormAlert message={JsonImports.userPanelEmptyForm} showIcon type="error" /> : null
+                }
+                <ModalEditForm 
+                    userToEdit={state.userSelected}
+                    roles={state.roles}
+                    handleEditFinish={handleEditFinish}
+                    handleEditCancel={handleEditCancel}
+                />
+            </Modal>
+            <Modal
+                title={JsonImports.userPanelCreateModalTitle}
+                visible={state.userCreateMode}
+                onCancel={handleCreateCancel}
+                footer={null}
+                destroyOnClose
+            >
+                {
+                    state.createUserFormEmpty ?
+                    <StyleImports.GlobalFormAlert message={JsonImports.userPanelEmptyCreate} showIcon type="error" /> : null
+                }
+                <ModalCreateForm 
+                    roles={state.roles}
+                    handleCreateFinish={handleCreateFinish}
+                    handleCreateCancel={handleCreateCancel}
+                />
             </Modal>
         </>
     );

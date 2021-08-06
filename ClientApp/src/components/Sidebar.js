@@ -6,7 +6,6 @@ import { connect } from "react-redux";
 import { JsonImports } from "./minor/imports";
 
 const { Sider } = Layout;
-const { Submenu } = Menu;
 
 const Sidebar = (props) => {
     const { fullName, isLoggedIn } = props;
@@ -25,17 +24,12 @@ const Sidebar = (props) => {
                                 { JsonImports.usersPanel }
                             </NavLink>
                         </Menu.Item>
-                        <Menu.Item key='3' icon={<IconImports.UserAddIcon/>}>
-                            <NavLink to='/admin/create-role'>
-                                { JsonImports.addRole }
+                        <Menu.Item key='3' icon={<IconImports.ControlIcon/>}>
+                            <NavLink to='/admin/roles'>
+                                { JsonImports.rolesPanel }
                             </NavLink>
                         </Menu.Item>
-                        <Menu.Item key='4' icon={<IconImports.UserDeleteIcon/>}>
-                            <NavLink to='/admin/delete-role'>
-                                { JsonImports.deleteRole }
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key='5' icon={<IconImports.MailIcon/>}>
+                        <Menu.Item key='4' icon={<IconImports.MailIcon/>}>
                             { JsonImports.userInbox }
                         </Menu.Item>
                     </Menu>

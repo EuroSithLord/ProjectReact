@@ -12,17 +12,23 @@ import {
     navbarAppTitle, navbarAuthButton, navbarDashboardButton, navbarHomeButton
 } from "../../json/appFeedback.json";
 import {
-    menuItemAddRole, menuItemUserInbox, menuItemUsersPanel, menuItemDeleteRole
+    menuItemUserInbox, menuItemUsersPanel, menuItemRolesPanel
 } from '../../json/appFeedback.json';
 import {
-    createRoleFormLabel, createRoleFormReset, createRoleFormSubmit, createRoleFormTitle, createRoleFormPlaceholder,
-    createRoleFail, createRoleSuccess, deleteRoleFormLabel, deleteRoleFormReset, deleteRoleFormSubmit, deleteRoleFormTitle, deleteRoleFormPlaceholder,
-    deleteRoleFail, deleteRoleSuccess
+    createRoleFormLabel, createRoleFormReset, createRoleFormSubmit, createRoleFormTitle, createRoleFail, createRoleSuccess, 
+    deleteRoleFail, deleteRoleSuccess, rolePanelErrorTitle, rolePanelTitle,
+    rolePanelEditButton, rolePanelRemove, rolePanelEditModalTitle, rolePanelEmptyForm, editRoleOldName, editRoleNewName,
+    rolePanelAddRole, rolePanelCreateModalTitle, rolePanelEmptyCreate, rolePanelCreateCancel, rolePanelEditCancel, rolePanelSaveEdit,
+    rolePanelResetEdit, rolePanelSaveCreate, rolePanelResetCreate, editRoleSuccess, editRoleFail
 } from '../../json/appFeedback.json';
 import {
-    userPanelSubmit, userPanelTableRolesSelectPlaceholder, userPanelEditButton, userPanelSaveEditButton, userPanelErrorTitle, errorUserNoRole, userPanelTitle,
-    userPanelModalTitle, userPanelCancelEdit, userPanelModalNewEmailHint, userPanelModalNewNameHint, userPanelModalNewUserNameHint, userPanelModalNewRoleHint,
-    userPanelModalOldEmailHint, userPanelModalOldNameHint, userPanelModalOldRoleHint, userPanelModalOldUserNameHint, userPanelModalUserSelectPlaceholder
+    userPanelAddUser, userPanelTableRolesSelectPlaceholder, userPanelEditButton, userPanelSaveEditButton, userPanelErrorTitle, errorUserNoRole, userPanelTitle,
+    userPanelEditModalTitle, userPanelCancelEdit, userPanelModalNewEmailHint, userPanelModalNewFNameHint, userPanelModalNewLNameHint, userPanelModalNewUserNameHint, userPanelModalNewRoleHint,
+    userPanelModalOldEmailHint, userPanelModalOldNameHint, userPanelModalOldRoleHint, userPanelModalOldUserNameHint, userPanelModalEmptyForm, userPanelRemoveUser,
+    userPanelRemoveUserError, userPanelRemoveUserSuccess, userPanelCreateModalTitle, userPanelCreateEmailHint, userPanelCreateRoleHint, userPanelCreateReset, userPanelCreateFNameHint,
+    userPanelCreateLNameHint, userPanelCreateUserError, userPanelCreateUserSuccess, userPanelCreatePasswordHint, userPanelCreateCancel, userPanelCreateSubmit, userPanelResetEdit,
+    userPanelEmptyCreate, userPanelEditSuccess, userPanelEditError, userPanelDetailsButton, userPanelDetailsEmail, userPanelDetailsName, userPanelDetailsUsername,
+    userPanelDetailsRoles
 } from '..//../json/appFeedback.json';
 import { loadingHint } from '../../json/appFeedback.json';
 import {
@@ -33,7 +39,8 @@ import {
     UserOutlined, MailOutlined, ControlOutlined, UserAddOutlined, UserDeleteOutlined, LoadingOutlined
 } from "@ant-design/icons";
 import { 
-    DocumentContainer, ContentContainer, FormContainer, PageTitle, LayoutInnerContainer, TableContainer
+    DocumentContainer, ContentContainer, FormContainer, PageTitle, LayoutInnerContainer, TableContainer, GlobalFormAlert, CardGroup, CustomPrimaryTitle,
+    CustomSecondTitle, CustomTertiaryTitle
 } from "./appStyles";
 import { notification, Spin } from "antd";
 
@@ -67,47 +74,84 @@ export class JsonImports {
     static dashboardButton = navbarDashboardButton;
     static homeButton = navbarHomeButton;
 
-    static addRole = menuItemAddRole;
     static userInbox = menuItemUserInbox;
     static usersPanel = menuItemUsersPanel;
-    static deleteRole = menuItemDeleteRole;
+    static rolesPanel = menuItemRolesPanel;
 
     static createRoleLabel = createRoleFormLabel;
     static createRoleReset = createRoleFormReset;
     static createRoleSubmit = createRoleFormSubmit;
     static createRoleTitle = createRoleFormTitle;
-    static createRolePlaceholder = createRoleFormPlaceholder;
     static createRoleFail = createRoleFail;
     static createRoleSuccess = createRoleSuccess;
 
-    static deleteRoleLabel = deleteRoleFormLabel;
-    static deleteRoleReset = deleteRoleFormReset;
-    static deleteRoleSubmit = deleteRoleFormSubmit;
-    static deleteRoleTitle = deleteRoleFormTitle;
-    static deleteRolePlaceholder = deleteRoleFormPlaceholder;
     static deleteRoleFail = deleteRoleFail;
     static deleteRoleSuccess = deleteRoleSuccess;
 
+    static rolePanelError = rolePanelErrorTitle;
+    static rolePanelTitle = rolePanelTitle;
+    static rolePanelEdit = rolePanelEditButton;
+    static rolePanelRemove = rolePanelRemove;
+    static rolePanelEditModalTitle = rolePanelEditModalTitle;
+    static rolePanelEmptyForm = rolePanelEmptyForm;
+    static editRoleNewName = editRoleNewName;
+    static editRoleOldName = editRoleOldName;
+    static rolePanelAddRole = rolePanelAddRole;
+    static rolePanelCreateModalTitle = rolePanelCreateModalTitle;
+    static rolePanelEmptyCreate = rolePanelEmptyCreate;
+    static rolePanelCreateCancel = rolePanelCreateCancel;
+    static rolePanelEditCancel = rolePanelEditCancel;
+    static rolePanelSaveEdit = rolePanelSaveEdit;
+    static rolePanelResetEdit = rolePanelResetEdit;
+    static rolePanelSaveCreate = rolePanelSaveCreate;
+    static rolePanelResetCreate = rolePanelResetCreate;
+    static editRoleSuccess = editRoleSuccess;
+    static editRoleFail = editRoleFail;
+
     static loadingHint = loadingHint;
 
-    static userPanelSubmit = userPanelSubmit;
+    static userPanelAddUser = userPanelAddUser;
     static userPanelPlaceholder = userPanelTableRolesSelectPlaceholder;
     static userPanelEdit = userPanelEditButton;
+    static userPanelRemove = userPanelRemoveUser;
     static userPanelSaveEdit = userPanelSaveEditButton;
     static userPanelError = userPanelErrorTitle;
     static userPanelNoRole = errorUserNoRole;
     static userPanelTitle = userPanelTitle;
-    static userPanelModalTitle = userPanelModalTitle;
+    static userPanelEditModalTitle = userPanelEditModalTitle;
     static userPanelCancelEdit = userPanelCancelEdit;
     static userPanelNewEmail = userPanelModalNewEmailHint;
-    static userPanelNewName = userPanelModalNewNameHint;
+    static userPanelNewFName = userPanelModalNewFNameHint;
+    static userPanelNewLName = userPanelModalNewLNameHint;
     static userPanelNewUserName = userPanelModalNewUserNameHint;
     static userPanelNewRole = userPanelModalNewRoleHint;
     static userPanelOldEmail = userPanelModalOldEmailHint;
     static userPanelOldName = userPanelModalOldNameHint;
     static userPanelOldUserName = userPanelModalOldUserNameHint;
     static userPanelOldRole = userPanelModalOldRoleHint;
-    static userPanelUserPlacehold = userPanelModalUserSelectPlaceholder;
+    static userPanelResetEdit = userPanelResetEdit;
+    static userPanelEmptyForm = userPanelModalEmptyForm;
+    static userPanelRemoveError = userPanelRemoveUserError;
+    static userPanelRemoveSuccess = userPanelRemoveUserSuccess;
+    static userPanelCreateModalTitle = userPanelCreateModalTitle;
+    static userPanelCreateEmail = userPanelCreateEmailHint;
+    static userPanelCreateCancel = userPanelCreateCancel;
+    static userPanelCreatePassword = userPanelCreatePasswordHint;
+    static userPanelCreateRole = userPanelCreateRoleHint;
+    static userPanelCreateReset = userPanelCreateReset;
+    static userPanelCreateSubmit = userPanelCreateSubmit;
+    static userPanelCreateUserError = userPanelCreateUserError;
+    static userPanelCreateUserSuccess = userPanelCreateUserSuccess;
+    static userPanelCreateFName = userPanelCreateFNameHint;
+    static userPanelCreateLName = userPanelCreateLNameHint;
+    static userPanelEmptyCreate = userPanelEmptyCreate;
+    static userPanelEditError = userPanelEditError;
+    static userPanelEditSuccess = userPanelEditSuccess;
+    static userPanelDetails = userPanelDetailsButton;
+    static userPanelDetailsEmail = userPanelDetailsEmail;
+    static userPanelDetailsName = userPanelDetailsName;
+    static userPanelDetailsUsername = userPanelDetailsUsername;
+    static userPanelDetailsRoles = userPanelDetailsRoles;
 }
 
 export class StyleImports {
@@ -133,6 +177,11 @@ export class StyleImports {
     static TableContainer = TableContainer;
     static LoadingSpin = Spin;
     static InlineContainer = InlineFormContainer;
+    static GlobalFormAlert = GlobalFormAlert;
+    static CustomPrimaryTitle = CustomPrimaryTitle;
+    static CustomSecondaryTitle = CustomSecondTitle
+    static CustomTertiaryTitle = CustomTertiaryTitle;
+    static CardGroup = CardGroup;
 }
 
 export class IconImports {

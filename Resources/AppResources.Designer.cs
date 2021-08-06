@@ -124,6 +124,15 @@ namespace Project_React.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ați eliminat toate rolurile..
+        /// </summary>
+        internal static string RoleDeletionNoRolesLeft {
+            get {
+                return ResourceManager.GetString("RoleDeletionNoRolesLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rolul dat nu există..
         /// </summary>
         internal static string RoleDoesNotExist {
@@ -142,11 +151,29 @@ namespace Project_React.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Un utilizator cu acest email ales este deja înregistrat..
+        ///   Looks up a localized string similar to Rolul a fost modificat..
         /// </summary>
-        internal static string UserAlreadyRegistered {
+        internal static string RoleUpdated {
             get {
-                return ResourceManager.GetString("UserAlreadyRegistered", resourceCulture);
+                return ResourceManager.GetString("RoleUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modificarea rolului este imposibilă..
+        /// </summary>
+        internal static string RoleUpdateImpossible {
+            get {
+                return ResourceManager.GetString("RoleUpdateImpossible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Un utilizator cu acest email ales există deja..
+        /// </summary>
+        internal static string UserAlreadyExists {
+            get {
+                return ResourceManager.GetString("UserAlreadyExists", resourceCulture);
             }
         }
         
@@ -169,11 +196,128 @@ namespace Project_React.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Utilizator creat cu succes..
+        /// </summary>
+        internal static string UserCreated {
+            get {
+                return ResourceManager.GetString("UserCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Utilizatorul a fost creat dar nu i s-au putut acorda rolurile..
+        /// </summary>
+        internal static string UserCreatedNoRole {
+            get {
+                return ResourceManager.GetString("UserCreatedNoRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crearea acestui utilizator este imposibilă..
+        /// </summary>
+        internal static string UserCreationImpossible {
+            get {
+                return ResourceManager.GetString("UserCreationImpossible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Utilizatorul dat a fost eliminat..
+        /// </summary>
+        internal static string UserDeleted {
+            get {
+                return ResourceManager.GetString("UserDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Utilizatorul dat nu a putut fi șters..
+        /// </summary>
+        internal static string UserDeletionImpossible {
+            get {
+                return ResourceManager.GetString("UserDeletionImpossible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Acest utilizator nu există..
+        /// </summary>
+        internal static string UserDeletionNoUserInDb {
+            get {
+                return ResourceManager.GetString("UserDeletionNoUserInDb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ați eliminat toți utilizatorii..
+        /// </summary>
+        internal static string UserDeletionNoUsersLeft {
+            get {
+                return ResourceManager.GetString("UserDeletionNoUsersLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Acest utilizator nu există..
+        /// </summary>
+        internal static string UserDoesNotExist {
+            get {
+                return ResourceManager.GetString("UserDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Utilizatorul a fost modificat..
+        /// </summary>
+        internal static string UserEdited {
+            get {
+                return ResourceManager.GetString("UserEdited", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Utilizatorul a fost modificat dar nu i s-au acordat rolurile. Roluri neatribuite: {0}..
+        /// </summary>
+        internal static string UserEditedNoRoles {
+            get {
+                return ResourceManager.GetString("UserEditedNoRoles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nu s-a putut actualiza utilizatorul dat..
+        /// </summary>
+        internal static string UserEditImpossible {
+            get {
+                return ResourceManager.GetString("UserEditImpossible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nu au fost detectate schimbări în datele utilizatorului..
+        /// </summary>
+        internal static string UserModificationSameData {
+            get {
+                return ResourceManager.GetString("UserModificationSameData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Înregistrarea utilizatorului imposibilă. Încercați din nou..
         /// </summary>
         internal static string UserRegistrationImpossible {
             get {
                 return ResourceManager.GetString("UserRegistrationImpossible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Utilizator creat cu succes, dar nu toate rolurile au fost atribuite. Roluri neatribuite: {0}.
+        /// </summary>
+        internal static string UsersCreatedNoRoles {
+            get {
+                return ResourceManager.GetString("UsersCreatedNoRoles", resourceCulture);
             }
         }
         

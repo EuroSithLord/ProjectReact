@@ -1,10 +1,8 @@
 import React from 'react';
-import { Select, Button } from 'antd';
-import { JsonImports, StyleImports } from '../imports';
+import { Button } from 'antd';
+import { JsonImports } from '../imports';
 
-const { Option } = Select;
-
-export const usersTableColumns = (state, handleEditMode, handleEditFinish) => {
+export const usersTableColumns = (handleEditMode, handleRemoveUser, handleDetailsMode) => {
         console.log("test");
         return  [
             {
@@ -42,34 +40,20 @@ export const usersTableColumns = (state, handleEditMode, handleEditFinish) => {
                 sortDirections: ['descend', 'ascend'],
             },
             {
-                title: 'Rol utilizator',
-                dataIndex: 'role',
-                key: 'role',
-                colspan: 0,
-                rowspan: 0,
-                //render: () => (
-                    /*<Select 
-                        showSearch
-                        placeholder={JsonImports.userPanelPlaceholder}
-                        optionFilterProp="roles"
-                        filterOption={(input, option) => option.roles.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                        disabled={!state.userEditMode}
-                    >
-                        {
-                            state.roles.map(role => {
-                                return <Option key={role.name}>{role.name}</Option>
-                            })
-                        }
-                    </Select>*/
-                //)
-            },
-            {
                 title: 'Acțiuni',
                 key: 'tableActions',
                 render: (props) => (
-                    <Button onClick={handleEditMode} user={props.record}>
-                        { JsonImports.userPanelEdit }
-                    </Button>
+                    <>
+                        <Button onClick={() => {handleDetailsMode(props.key)}} user={props.record} style={{margin: "5px 5px 5px 5px"}}>
+                            { JsonImports.userPanelDetails }
+                        </Button>
+                        <Button onClick={() => {handleEditMode(props.key)}} user={props.record} style={{margin: "5px 5px 5px 5px"}}>
+                            { JsonImports.userPanelEdit }
+                        </Button>
+                        <Button onClick={() => {handleRemoveUser(props.key)}} user={props.record} style={{margin: "5px 5px 5px 5px"}} type="primary">
+                            { JsonImports.userPanelRemove }
+                        </Button>
+                    </>
                 )
             }
         ]

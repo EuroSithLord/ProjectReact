@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Container } from 'reactstrap';
+import { Alert } from "antd";
 
 export const DocumentContainer = styled.div`
     width: 100%;
@@ -38,4 +39,37 @@ export const TableContainer = styled.div`
     max-width: calc(100% - 20px);
     margin: auto;
     padding: 100px 0px 100px 0px;
+`
+
+export const GlobalFormAlert = styled(Alert)`
+    margin-top: 0px;
+    margin-bottom: 20px;
+`
+
+export const CardGroup = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-top: ${props => props.marginTop}px;
+    margin-bottom: ${props => props.marginBottom}px;
+`
+
+export const CustomTertiaryTitle = styled.h3`
+    color: ${props => props.color};
+    margin-top: ${props => props.marginTop}px;
+    margin-bottom: ${props => props.marginBottom}px;
+    font-size: ${props => props.fontSize}px;
+`
+
+export const CustomSecondTitle = styled.h2`
+    color: ${props => props.color};
+    margin-top: ${props => props.marginTop}px;
+    margin-bottom: ${props => props.marginBottom}px;
+    font-size: ${props => props.fontSize}px;
+`
+
+export const CustomPrimaryTitle = styled.h1`
+    color: ${props => props.color};
+    margin-top: ${props => props.marginTop}px;
+    margin-bottom: ${props => props.marginBottom}px;
+    font-size: ${props => props.fontSize}px;
 `

@@ -138,14 +138,23 @@
   <data name="RoleDeletionImpossible" xml:space="preserve">
     <value>Rolul dat nu a putut fi șters.</value>
   </data>
+  <data name="RoleDeletionNoRolesLeft" xml:space="preserve">
+    <value>Ați eliminat toate rolurile.</value>
+  </data>
   <data name="RoleDoesNotExist" xml:space="preserve">
     <value>Rolul dat nu există.</value>
   </data>
   <data name="RolesDoNotExist" xml:space="preserve">
     <value>Nu există roluri pentru utilizatori.</value>
   </data>
-  <data name="UserAlreadyRegistered" xml:space="preserve">
-    <value>Un utilizator cu acest email ales este deja înregistrat.</value>
+  <data name="RoleUpdated" xml:space="preserve">
+    <value>Rolul a fost modificat.</value>
+  </data>
+  <data name="RoleUpdateImpossible" xml:space="preserve">
+    <value>Modificarea rolului este imposibilă.</value>
+  </data>
+  <data name="UserAlreadyExists" xml:space="preserve">
+    <value>Un utilizator cu acest email ales există deja.</value>
   </data>
   <data name="UserAuthenticationImpossible" xml:space="preserve">
     <value>Nu s-a putut realiza autentificarea.</value>
@@ -153,8 +162,47 @@
   <data name="UserBadCredentials" xml:space="preserve">
     <value>Date de autentificare greșite.</value>
   </data>
+  <data name="UserCreated" xml:space="preserve">
+    <value>Utilizator creat cu succes.</value>
+  </data>
+  <data name="UserCreatedNoRole" xml:space="preserve">
+    <value>Utilizatorul a fost creat dar nu i s-au putut acorda rolurile.</value>
+  </data>
+  <data name="UserCreationImpossible" xml:space="preserve">
+    <value>Crearea acestui utilizator este imposibilă.</value>
+  </data>
+  <data name="UserDeleted" xml:space="preserve">
+    <value>Utilizatorul dat a fost eliminat.</value>
+  </data>
+  <data name="UserDeletionImpossible" xml:space="preserve">
+    <value>Utilizatorul dat nu a putut fi șters.</value>
+  </data>
+  <data name="UserDeletionNoUserInDb" xml:space="preserve">
+    <value>Acest utilizator nu există.</value>
+  </data>
+  <data name="UserDeletionNoUsersLeft" xml:space="preserve">
+    <value>Ați eliminat toți utilizatorii.</value>
+  </data>
+  <data name="UserDoesNotExist" xml:space="preserve">
+    <value>Acest utilizator nu există.</value>
+  </data>
+  <data name="UserEdited" xml:space="preserve">
+    <value>Utilizatorul a fost modificat.</value>
+  </data>
+  <data name="UserEditedNoRoles" xml:space="preserve">
+    <value>Utilizatorul a fost modificat dar nu i s-au acordat rolurile. Roluri neatribuite: {0}.</value>
+  </data>
+  <data name="UserEditImpossible" xml:space="preserve">
+    <value>Nu s-a putut actualiza utilizatorul dat.</value>
+  </data>
+  <data name="UserModificationSameData" xml:space="preserve">
+    <value>Nu au fost detectate schimbări în datele utilizatorului.</value>
+  </data>
   <data name="UserRegistrationImpossible" xml:space="preserve">
     <value>Înregistrarea utilizatorului imposibilă. Încercați din nou.</value>
+  </data>
+  <data name="UsersCreatedNoRoles" xml:space="preserve">
+    <value>Utilizator creat cu succes, dar nu toate rolurile au fost atribuite. Roluri neatribuite: {0}</value>
   </data>
   <data name="UsersDoNotExist" xml:space="preserve">
     <value>Nu există utilizatori.</value>

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Project_React.Controllers.Users.ReturnModels
 {
     /// <summary>
-    ///     User model for return on GetUsers request in Users Panel.
+    ///     Model for initial (non-detailed) users table.
     /// </summary>
-    public class GetUsersModel
+    public class InitialGetUserModel
     {
         /// <summary>
         ///    Gets and sets the user UserId.
@@ -27,10 +29,5 @@ namespace Project_React.Controllers.Users.ReturnModels
         ///     Gets and sets user's name.
         /// </summary>
         public string Name { get; set; }
-
-        /// <summary>
-        ///     Gets and sets user's role.
-        /// </summary>
-        public IList<string> Roles { get; set; }
     }
 }

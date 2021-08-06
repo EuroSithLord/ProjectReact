@@ -12,9 +12,8 @@ import { PublicRoute, PrivateRoute } from "./components/RouterRoutes";
 import { Switch } from 'react-router-dom';
 import { StyleImports } from './components/minor/imports';
 import Sidebar from './components/Sidebar';
-import CreateRole from './components/CreateRole';
-import DeleteRole from './components/DeleteRole';
 import UserPanel from './components/UserPanel';
+import RolePanel from './components/RolePanel';
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -64,8 +63,7 @@ const App = (props) => {
                 <PrivateRoute isLoggedIn={isLoggedIn} restricted={false} exact path="/" component={Home}/>
                 <PrivateRoute isLoggedIn={isLoggedIn} restricted={false} path="/dashboard" redirect="/" exact component={Dashboard}/>
                 <PrivateRoute isLoggedIn={isLoggedIn} restricted={false} exact path="/admin/users" component={UserPanel}/>
-                <PrivateRoute isLoggedIn={isLoggedIn} restricted={false} exact path="/admin/create-role" component={CreateRole}/>
-                <PrivateRoute isLoggedIn={isLoggedIn} restricted={false} exact path="/admin/delete-role" component={DeleteRole}/>
+                <PrivateRoute isLoggedIn={isLoggedIn} restricted={false} exact path="/admin/roles" component={RolePanel}/>
                 <PublicRoute isLoggedIn={isLoggedIn} exact path='/' component={Login}/>
                 <PublicRoute isLoggedIn={isLoggedIn} path="/auth/register" component={Register} />
               </Layout>

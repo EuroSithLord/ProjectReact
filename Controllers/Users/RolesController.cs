@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Project_React.Context;
 using Project_React.Controllers.Users.IncomingModels;
+using Project_React.Controllers.Users.ReturnModels;
 using Project_React.Models;
 using Project_React.Resources;
 using System.Linq;
@@ -78,12 +79,21 @@ namespace Project_React.Controllers.Users
             };
             var result = await _roleManager.CreateAsync(newRole);
 
-            if (result.Succeeded) return Ok(AppResources.RoleCreated);
+            if (result.Succeeded)
+            {
+                var roleDbList = _roleManager.Roles.ToList();
+                var roleList = roleDbList.Select(role => new RoleModel
+                {
+                    Name = role.Name
+                });
+
+                return Ok(new { Roles = roleList, Message = AppResources.RoleCreated });
+            }
             return BadRequest(AppResources.RoleCreationImpossible);
         }
 
         /// <summary>
-        ///     HTTP Post request method. Removes role from application. Takes
+        ///     HTTP Delete request method. Removes role from application. Takes
         ///     <paramref name="roleModel"/> as parameter from request body.
         /// </summary>
         /// <returns> 
@@ -103,8 +113,43 @@ namespace Project_React.Controllers.Users
 
             var result = await _roleManager.DeleteAsync(role);
 
-            if (result.Succeeded) return Ok(AppResources.RoleDeleted);
-            return BadRequest(AppResources.RoleDeletionImpossible);
+            if (!result.Succeeded) return BadRequest(AppResources.RoleDeletionImpossible);
+
+            var roleDbList = _roleManager.Roles.ToList();
+
+            if (roleDbList is null) return Ok(new RoleRemovalModel { Message = AppResources.RoleDeletionNoRolesLeft, Roles = null });
+
+            var roleReturnList = roleDbList.Select(role => new RoleModel
+            {
+                Name = role.Name
+            });
+
+            return Ok(new { Roles = roleReturnList, Message = AppResources.RoleDeleted });
+        }
+
+        [HttpPost("modification")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        async public Task<IActionResult> ChangeRole(ChangeRoleModel changeRole)
+        {
+            if (changeRole is null) return BadRequest(AppResources.NullRole);
+
+            var role = _context.Roles.FirstOrDefault(role => role.Name == changeRole.OldName);
+
+            if (role is null) return BadRequest(AppResources.RoleDoesNotExist);
+
+            role.Name = changeRole.NewName;
+            var result = await _roleManager.UpdateAsync(role);
+
+            if (!result.Succeeded) return BadRequest(AppResources.RoleUpdateImpossible);
+
+            var roleDbList = _roleManager.Roles.ToList();
+            var roleReturnList = roleDbList.Select(role => new RoleModel
+            {
+                Name = role.Name
+            });
+
+            return Ok(new { Roles = roleReturnList, Message = AppResources.RoleUpdated });
         }
     }
 }
