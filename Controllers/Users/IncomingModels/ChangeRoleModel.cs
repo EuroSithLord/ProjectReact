@@ -13,11 +13,11 @@ namespace Project_React.Controllers.Users.IncomingModels
         /// <summary>
         ///     Getter/setter for the old name of the role.
         /// </summary>
-        public string OldName { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         ///     Getter/setter for the new name of the role.
         /// </summary>
-        public string NewName { get; set; }
+        public string Name { get; set; }
     }
 }

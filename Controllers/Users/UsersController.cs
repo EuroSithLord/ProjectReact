@@ -56,15 +56,6 @@ namespace Project_React.Controllers.Users
 
             if (userDb is null) return BadRequest(AppResources.UsersDoNotExist);
 
-            /*var userList = userDbList.Select(user => new GetUsersModel
-            {
-                Id = user.Id,
-                Name = $"{user.FirstName} {user.LastName}",
-                UserName = user.UserName,
-                Email = user.Email,
-                Roles = new List<string>()
-            });*/
-
             var roles = await _userManager.GetRolesAsync(userDb);
 
             return Ok(new GetUsersModel
@@ -82,10 +73,9 @@ namespace Project_React.Controllers.Users
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         async public Task<IActionResult> DeleteUser(GetUsersModel getUser)
         {
-            // can we call GetUsers method?
             if (getUser is null) return BadRequest(AppResources.NullUser);
 
-            var user = _context.Users.FirstOrDefault(user => user.Email == getUser.Email);
+            var user = _context.Users.FirstOrDefault(user => user.Id == getUser.Id);
 
             if (user is null) return BadRequest(AppResources.UserDeletionNoUserInDb);
 
@@ -105,7 +95,7 @@ namespace Project_React.Controllers.Users
                 Roles = await _userManager.GetRolesAsync(user)
             });
 
-            return Ok(new { Users = userReturnList, Message = AppResources.UserDeleted });
+            return Ok(AppResources.UserDeleted);
         }
 
         [HttpPost("creation")]
@@ -121,8 +111,6 @@ namespace Project_React.Controllers.Users
 
             var hasher = new PasswordHasher<CreateUserModel>();
             var hash = hasher.HashPassword(userToCreate, userToCreate.Password);
-            // TODO: set guid to newUser
-            // or configure dbcontext to give roles directly to newUser (virtual property - property.collection)
             var newUser = new User
             {
                 Email = userToCreate.Email,
@@ -137,9 +125,6 @@ namespace Project_React.Controllers.Users
             else
             {
                 var roleResult = await _userManager.AddToRolesAsync(newUser, userToCreate.Roles);
-
-                // TODO: Best practice for updating list 
-
                 var userDbList = _userManager.Users.ToList();
                 var userReturnList = userDbList.Select(async user => new GetUsersModel
                 {
@@ -150,7 +135,6 @@ namespace Project_React.Controllers.Users
                 });
 
                 return Ok(new { Users = userReturnList, Message = AppResources.UserCreated });
-                // return Ok(new { Users = userReturnList, Message = string.Format(AppResources.UserCreatedNoRole, rolesNotAdded) });
             }
         }
 
@@ -183,15 +167,12 @@ namespace Project_React.Controllers.Users
 
             var rolesNotAdded = new List<string>();
 
+            // remove all roles form user and add new roles from client
+
             if (userToChange.Roles.Any())
             {
-                var rolesRemovalResult = await _userManager.RemoveFromRolesAsync(user, userRoles);
-
-                if (rolesRemovalResult.Succeeded)
-                {
-                    var roleResult = await _userManager.AddToRolesAsync(user, userToChange.Roles);
-                }
-                else rolesNotAdded = (List<string>)userToChange.Roles;
+                var rolesRemovalResult = await _userManager.RemoveFromRolesAsync(user, await _userManager.GetRolesAsync(user));
+                var roleResult = await _userManager.AddToRolesAsync(user, userToChange.Roles);
             }
 
             var result = await _userManager.UpdateAsync(user);

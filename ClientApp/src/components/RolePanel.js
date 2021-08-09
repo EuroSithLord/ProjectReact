@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { IconImports, JsonImports, StyleImports } from './minor/imports';
 import { Button, Table, Modal } from 'antd';
 import { connect } from "react-redux";
@@ -13,10 +13,8 @@ const RolePanel = (props) => {
         roles: [],
         roleEditMode: false,
         roleCreateMode: false,
-        editedRole: {},
-        roleToEdit: {},
+        roleSelected: {},
         editRoleFormEmpty: false,
-        createRoleFormEmpty: false
     });
 
     useEffect(() => {
@@ -26,6 +24,7 @@ const RolePanel = (props) => {
             const roles = response.data.map((row, index) => ({
                 key: index,
                 name: row.name,
+                id: row.id
             }));
             setState({
                 ...state,
@@ -48,42 +47,37 @@ const RolePanel = (props) => {
         const role = state.roles.find(role => role.key === key);
         setState({
             ...state,
-            roleToEdit: role,
+            roleSelected: role,
             roleEditMode: true,
         });
     }
 
-    const handleRemoveRole = (event) => {
-        const node = parseInt(event.target.parentElement.parentElement.parentElement.dataset.rowKey);
-        const role = state.roles.filter(user => user.key === node);
-        deleteRole(role[0], (response) => {
-            const roles = response.data.roles.map((row, index) => ({
-                    key: index,
-                    name: row.name,
-                }));
+    const handleRemoveRole = (key) => {
+        const role = state.roles.find(user => user.key === key);
+        deleteRole(role, (response) => {
             setState({
                 ...state,
-                roles: roles,
+                roles: state.roles.filter(role => role.key !== key),
             });
             StyleImports.Notification["success"]({
                 message: JsonImports.deleteRoleSuccess,
-                description: response.data.message
+                description: response.data
             });
         }, (exception) => {
             StyleImports.Notification["error"]({
                 message: JsonImports.deleteRole,
-                description: exception.response.data.message
+                description: exception.response.data
             });
         })
     }
 
     const handleEditFinish = (values) => {
-        console.log(values);
-        if (values.newName !== undefined) {
-            changeRole(values, (response) => {
+        if (values.name !== undefined) {
+            changeRole(values, state.roleSelected, (response) => {
                 const roles = response.data.roles.map((row, index) => ({
                     key: index,
                     name: row.name,
+                    id: row.id
                 }));
                 setState({
                     ...state,
@@ -127,15 +121,11 @@ const RolePanel = (props) => {
             }, (exception => {
                 StyleImports.Notification["error"]({
                     message: JsonImports.createRoleFail,
-                    description: exception.response.data.message
+                    description: exception.response.data
                 });
             }));
             return;
         }
-        setState({
-            ...state,
-            createRoleFormEmpty: true
-        });
     }
 
     const handleCreateCancel = () => {
@@ -159,7 +149,7 @@ const RolePanel = (props) => {
         });
     }
 
-    const columns = rolesTableColumns(handleEditMode, handleRemoveRole);
+    const columns = useMemo(() => rolesTableColumns(handleEditMode, handleRemoveRole), [state.roles]);
 
     return(
         <>
@@ -169,7 +159,12 @@ const RolePanel = (props) => {
                     !state.loading ? 
                     <>
                         <StyleImports.PageTitle>{ JsonImports.rolePanelTitle }</StyleImports.PageTitle>
-                        <Table rowKey={record => record.key} columns={columns} dataSource={state.roles}/>
+                        <Table 
+                            pagination={{ defaultPageSize: 5, showSizeChanger: true, pageSizeOptions: ['5', '10', '20', '30'] }} 
+                            rowKey={record => record.key} 
+                            columns={columns} 
+                            dataSource={state.roles}
+                        />
                         <Button type="primary" onClick={handleOpenCreate}>{ JsonImports.rolePanelAddRole }</Button>
                     </> : null
                 }

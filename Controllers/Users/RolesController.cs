@@ -40,7 +40,6 @@ namespace Project_React.Controllers.Users
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult GetRoles()
         {
-            // TODO: web api name convention url
             // TODO: cancellation token
             var roleDbList = _roleManager.Roles.ToList();
 
@@ -48,6 +47,7 @@ namespace Project_React.Controllers.Users
 
             var roleList = roleDbList.Select(role => new RoleModel
             {
+                Id = role.Id,
                 Name = role.Name
             });
 
@@ -69,7 +69,7 @@ namespace Project_React.Controllers.Users
         {
             if (roleModel is null) return BadRequest(AppResources.NullRole);
 
-            var role = _context.Roles.FirstOrDefault(role => role.Name == roleModel.Name);
+            var role = _context.Roles.FirstOrDefault(role => role.Id == roleModel.Id);
 
             if (role is not null) return BadRequest(AppResources.RoleAlreadyExists);
 
@@ -107,7 +107,7 @@ namespace Project_React.Controllers.Users
         {
             if (roleModel is null) return BadRequest(AppResources.NullRole);
 
-            var role = _context.Roles.FirstOrDefault(role => role.Name == roleModel.Name);
+            var role = _context.Roles.FirstOrDefault(role => role.Id == roleModel.Id);
 
             if (role is null) return BadRequest(AppResources.RoleDoesNotExist);
 
@@ -115,16 +115,7 @@ namespace Project_React.Controllers.Users
 
             if (!result.Succeeded) return BadRequest(AppResources.RoleDeletionImpossible);
 
-            var roleDbList = _roleManager.Roles.ToList();
-
-            if (roleDbList is null) return Ok(new RoleRemovalModel { Message = AppResources.RoleDeletionNoRolesLeft, Roles = null });
-
-            var roleReturnList = roleDbList.Select(role => new RoleModel
-            {
-                Name = role.Name
-            });
-
-            return Ok(new { Roles = roleReturnList, Message = AppResources.RoleDeleted });
+            return Ok(AppResources.RoleDeleted);
         }
 
         [HttpPost("modification")]
@@ -134,11 +125,11 @@ namespace Project_React.Controllers.Users
         {
             if (changeRole is null) return BadRequest(AppResources.NullRole);
 
-            var role = _context.Roles.FirstOrDefault(role => role.Name == changeRole.OldName);
+            var role = _context.Roles.FirstOrDefault(role => role.Id == changeRole.Id);
 
             if (role is null) return BadRequest(AppResources.RoleDoesNotExist);
 
-            role.Name = changeRole.NewName;
+            role.Name = changeRole.Name;
             var result = await _roleManager.UpdateAsync(role);
 
             if (!result.Succeeded) return BadRequest(AppResources.RoleUpdateImpossible);

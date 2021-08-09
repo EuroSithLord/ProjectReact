@@ -11,7 +11,7 @@ export const createRole = (state, onSucceed, onFail) => {
 }
 
 export const deleteRole = (state, onSucceed, onFail) => {
-    axios.delete("api/roles", {data: { "name": state.name }})
+    axios.delete("api/roles", {data: { "id": state.id }})
         .then((response) => {
             if (response.status === 200) onSucceed(response);
         })
@@ -20,8 +20,8 @@ export const deleteRole = (state, onSucceed, onFail) => {
         });
 }
 
-export const changeRole = (role, onSucceed, onFail) => {
-    axios.post("api/roles/modification", { "oldName": role.oldName, "newName": role.newName })
+export const changeRole = (role, roleSelected, onSucceed, onFail) => {
+    axios.post("api/roles/modification", { "id": roleSelected.id, "name": role.name })
         .then((response) => {
             if (response.status === 200) onSucceed(response);
         })

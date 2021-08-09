@@ -19,7 +19,7 @@ import {
     deleteRoleFail, deleteRoleSuccess, rolePanelErrorTitle, rolePanelTitle,
     rolePanelEditButton, rolePanelRemove, rolePanelEditModalTitle, rolePanelEmptyForm, editRoleOldName, editRoleNewName,
     rolePanelAddRole, rolePanelCreateModalTitle, rolePanelEmptyCreate, rolePanelCreateCancel, rolePanelEditCancel, rolePanelSaveEdit,
-    rolePanelResetEdit, rolePanelSaveCreate, rolePanelResetCreate, editRoleSuccess, editRoleFail
+    rolePanelResetEdit, rolePanelSaveCreate, rolePanelResetCreate, editRoleSuccess, editRoleFail, rolePanelCreateEmptyName
 } from '../../json/appFeedback.json';
 import {
     userPanelAddUser, userPanelTableRolesSelectPlaceholder, userPanelEditButton, userPanelSaveEditButton, userPanelErrorTitle, errorUserNoRole, userPanelTitle,
@@ -28,7 +28,7 @@ import {
     userPanelRemoveUserError, userPanelRemoveUserSuccess, userPanelCreateModalTitle, userPanelCreateEmailHint, userPanelCreateRoleHint, userPanelCreateReset, userPanelCreateFNameHint,
     userPanelCreateLNameHint, userPanelCreateUserError, userPanelCreateUserSuccess, userPanelCreatePasswordHint, userPanelCreateCancel, userPanelCreateSubmit, userPanelResetEdit,
     userPanelEmptyCreate, userPanelEditSuccess, userPanelEditError, userPanelDetailsButton, userPanelDetailsEmail, userPanelDetailsName, userPanelDetailsUsername,
-    userPanelDetailsRoles
+    userPanelDetailsRoles, userPanelCreateMissingEmail, userPanelCreateMissingRoles, userPanelCreateMissingLName, userPanelCreateMissingFName, userPanelCreateMissingPassword
 } from '..//../json/appFeedback.json';
 import { loadingHint } from '../../json/appFeedback.json';
 import {
@@ -105,6 +105,7 @@ export class JsonImports {
     static rolePanelResetEdit = rolePanelResetEdit;
     static rolePanelSaveCreate = rolePanelSaveCreate;
     static rolePanelResetCreate = rolePanelResetCreate;
+    static rolePanelCreateEmptyName = rolePanelCreateEmptyName;
     static editRoleSuccess = editRoleSuccess;
     static editRoleFail = editRoleFail;
 
@@ -152,6 +153,11 @@ export class JsonImports {
     static userPanelDetailsName = userPanelDetailsName;
     static userPanelDetailsUsername = userPanelDetailsUsername;
     static userPanelDetailsRoles = userPanelDetailsRoles;
+    static userPanelCreateMissingEmail = userPanelCreateMissingEmail;
+    static userPanelCreateMissingFName = userPanelCreateMissingFName;
+    static userPanelCreateMissingLName = userPanelCreateMissingLName;
+    static userPanelCreateMissingPassword = userPanelCreateMissingPassword;
+    static userPanelCreateMissingRoles = userPanelCreateMissingRoles;
 }
 
 export class StyleImports {

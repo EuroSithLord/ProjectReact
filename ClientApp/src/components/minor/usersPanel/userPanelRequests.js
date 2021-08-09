@@ -14,7 +14,6 @@ export const getUsersAndRoles = (onSucceed, onFail) => {
 }
 
 export const getUserDetails = (user, onSucceed, onFail) => {
-    console.log(`${user.id}`);
     axios.get(`api/users/${user.id}`)
         .then((response) => {
             onSucceed(response)
@@ -26,9 +25,7 @@ export const getUserDetails = (user, onSucceed, onFail) => {
 
 export const removeUser = (user, onSucceed, onFail) => {
     axios.delete("api/users", {data: {
-            "name": user.name,
-            "userName": user.userName,
-            "email": user.email
+            "id": user.id,
         }})
         .then ((response) => {
             onSucceed(response);

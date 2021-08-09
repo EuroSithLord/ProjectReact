@@ -14,15 +14,9 @@ export const EditRole = (props) => {
                 layout="vertical" 
                 form={form} 
                 onFinish={props.handleEditFinish}
-                initialValues={{
-                    "oldName": props.roleToEdit.name,
-                }}
             >
-                <Form.Item name="oldName" label={JsonImports.editRoleOldName}>
-                    <Input disabled/>
-                </Form.Item>
-                <Form.Item name="newName" label={JsonImports.editRoleNewName}>
-                    <Input/>
+                <Form.Item name="name" label={JsonImports.editRoleNewName}>
+                    <Input allowClear/>
                 </Form.Item>
                 <Form.Item>
                     <div style={{display: "flex", justifyContent: "space-around"}}>
@@ -31,9 +25,6 @@ export const EditRole = (props) => {
                         </Button>
                         <Button htmlType="button" onClick={props.handleEditCancel}>
                             { JsonImports.rolePanelEditCancel }
-                        </Button>
-                        <Button htmlType="button" onClick={handleReset}>
-                            { JsonImports.rolePanelResetEdit }
                         </Button>
                     </div>
                 </Form.Item>

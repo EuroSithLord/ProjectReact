@@ -7,10 +7,6 @@ const { Option } = Select;
 export const ModalEditForm = (props) => {
     const [form] = Form.useForm();
 
-    const handleReset = () => {
-        form.resetFields();
-    }
-
     return (
         <Form 
             layout="vertical" 
@@ -19,19 +15,20 @@ export const ModalEditForm = (props) => {
             name="editUserForm"
         >
             <Form.Item name="firstName" label={JsonImports.userPanelNewFName}>
-                <Input />
+                <Input allowClear/>
             </Form.Item>
             <Form.Item name="lastName" label={JsonImports.userPanelNewLName}>
-                <Input />
+                <Input allowClear/>
             </Form.Item>
             <Form.Item  name="email" label={JsonImports.userPanelNewEmail}>
-                <Input />
+                <Input allowClear/>
             </Form.Item>
             <Form.Item name="userName" label={JsonImports.userPanelNewUserName}>
-                <Input />
+                <Input allowClear/>
             </Form.Item>
             <Form.Item name="roles" label={JsonImports.userPanelNewRole}>
                 <Select
+                    allowClear
                     showSearch
                     mode="multiple"
                     placeholder={JsonImports.userPanelPlacehold}
@@ -51,9 +48,6 @@ export const ModalEditForm = (props) => {
                     <Button htmlType="button" onClick={props.handleEditCancel}>
                         { JsonImports.userPanelCancelEdit }
                     </Button>
-                    <Button htmlType="button" onClick={handleReset}>
-                        { JsonImports.userPanelResetEdit }
-                    </Button>
                 </div>
             </Form.Item>
         </Form>
@@ -63,10 +57,6 @@ export const ModalEditForm = (props) => {
 export const ModalCreateForm = (props) => {
     const [form] = Form.useForm();
 
-    const handleReset = () => {
-        form.resetFields();
-    }
-
     return (
         <Form 
             layout="vertical" 
@@ -74,20 +64,66 @@ export const ModalCreateForm = (props) => {
             form={form} 
             name="createUserForm"
         >
-            <Form.Item name="firstName" label={JsonImports.userPanelCreateFName}>
-                <Input />
+            <Form.Item 
+                name="firstName" 
+                label={JsonImports.userPanelCreateFName}
+                rules={[
+                    {
+                        required: true,
+                        message: JsonImports.userPanelCreateMissingFName
+                    }
+                ]}
+            >
+                <Input allowClear/>
             </Form.Item>
-            <Form.Item name="lastName" label={JsonImports.userPanelCreateLName}>
-                <Input />
+            <Form.Item 
+                name="lastName" 
+                label={JsonImports.userPanelCreateLName}
+                rules={[
+                    {
+                        required: true,
+                        message: JsonImports.userPanelCreateMissingLName
+                    }
+                ]}
+            >
+                <Input allowClear/>
             </Form.Item>
-            <Form.Item  name="email" label={JsonImports.userPanelCreateEmail}>
-                <Input />
+            <Form.Item  
+                name="email" 
+                label={JsonImports.userPanelCreateEmail}
+                rules={[
+                    {
+                        required: true,
+                        message: JsonImports.userPanelCreateMissingEmail
+                    }
+                ]}    
+            >
+                <Input allowClear/>
             </Form.Item>
-            <Form.Item  name="password" label={JsonImports.userPanelCreatePassword}>
-                <Input type="password" />
+            <Form.Item  
+                name="password" 
+                label={JsonImports.userPanelCreatePassword}
+                rules={[
+                    {
+                        required: true,
+                        message: JsonImports.userPanelCreateMissingPassword
+                    }
+                ]}
+            >
+                <Input.Password allowClear />
             </Form.Item>
-            <Form.Item name="role" label={JsonImports.userPanelCreateRole}>
-                <Select
+            <Form.Item 
+                name="role" 
+                label={JsonImports.userPanelCreateRole}
+                rules={[
+                    {
+                        required: true,
+                        message: JsonImports.userPanelCreateMissingRoles
+                    }
+                ]}
+            >
+                <Select 
+                    allowClear
                     showSearch
                     mode="multiple"
                     placeholder={JsonImports.userPanelPlacehold}
@@ -106,9 +142,6 @@ export const ModalCreateForm = (props) => {
                     </Button>
                     <Button htmlType="button" onClick={props.handleCreateCancel}>
                         { JsonImports.userPanelCreateCancel }
-                    </Button>
-                    <Button htmlType="button" onClick={handleReset}>
-                        { JsonImports.createRoleReset }
                     </Button>
                 </div>
             </Form.Item>

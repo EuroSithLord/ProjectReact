@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { IconImports, JsonImports, StyleImports } from './minor/imports';
 import { Button, Table, Modal } from 'antd';
 import { getUsersAndRoles, removeUser, createUser, editUser, getUserDetails } from './minor/usersPanel/userPanelRequests';
@@ -18,7 +18,6 @@ const UserPanel = (props) => {
         editedUser: {},
         userSelected: {},
         editUserFormEmpty: false,
-        createUserFormEmpty: false
     });
 
     useEffect(() => {
@@ -76,20 +75,13 @@ const UserPanel = (props) => {
     const handleRemoveUser = (key) => {
         const user = state.users.find(user => user.key === key);
         removeUser(user, (response) => {
-            const users = response.data.users.map((row, index) => ({
-                key: index,
-                name: row.result.name,
-                userName: row.result.userName,
-                email: row.result.email,
-                role: row.result.role.length === 0 ? JsonImports.userPanelNoRole : row.result.role
-            }));
             setState({
                 ...state,
-                users: users,
+                users: state.users.filter(user => user.key !== key),
             });
             StyleImports.Notification["success"]({
                 message: JsonImports.userPanelRemoveSuccess,
-                description: response.data.message
+                description: response.data
             });
         }, (exception) => {
             StyleImports.Notification["error"]({
@@ -157,15 +149,11 @@ const UserPanel = (props) => {
             }, (exception) => {
                 StyleImports.Notification["error"]({
                     message: JsonImports.userPanelCreateUserError,
-                    description: exception.response.data.message
+                    description: exception.response.message
                 });
             });
             return;
         }
-        setState({
-            ...state,
-            createUserFormEmpty: true
-        });
     }
 
     const handleCreateCancel = () => {
@@ -196,7 +184,7 @@ const UserPanel = (props) => {
         });
     }
 
-    const columns = usersTableColumns(handleEditMode, handleRemoveUser, handleDetailsMode);
+    const columns = useMemo(() => usersTableColumns(handleEditMode, handleRemoveUser, handleDetailsMode), [state.users]);
 
     return(
         <>
@@ -206,7 +194,13 @@ const UserPanel = (props) => {
                     !state.loading ? 
                     <>
                         <StyleImports.PageTitle>{ JsonImports.userPanelTitle }</StyleImports.PageTitle>
-                        <Table rowKey={record => record.key} columns={columns} dataSource={state.users} style={{overflow: "auto"}}/>
+                        <Table 
+                            pagination={{ defaultPageSize: 5, showSizeChanger: true, pageSizeOptions: ['5', '10', '20', '30']}}
+                            rowKey={record => record.key} 
+                            columns={columns} 
+                            dataSource={state.users} 
+                            style={{overflow: "auto"}}
+                        />
                         <Button type="primary" onClick={handleOpenCreate}>{ JsonImports.userPanelAddUser }</Button>
                     </> : null
                 }

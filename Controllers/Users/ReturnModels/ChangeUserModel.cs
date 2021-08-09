@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Project_React.Controllers.Users.ReturnModels
 {
@@ -23,6 +24,7 @@ namespace Project_React.Controllers.Users.ReturnModels
         /// <summary>
         ///     User new email getter/setter.
         /// </summary>
+        [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]+$")]
         public string Email { get; set; }
 
         /// <summary>

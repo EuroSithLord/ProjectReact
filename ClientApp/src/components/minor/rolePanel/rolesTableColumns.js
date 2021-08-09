@@ -4,7 +4,7 @@ import { JsonImports } from '../imports';
 
 export const rolesTableColumns = (handleEditMode, handleRemoveRole) => {
         console.log("test");
-        return  [
+        const cols = [
             {
                 title: 'Nume',
                 dataIndex: 'name',
@@ -27,13 +27,15 @@ export const rolesTableColumns = (handleEditMode, handleRemoveRole) => {
                         <Button onClick={() => handleEditMode(props.key)} user={props.record} style={{margin: "5px 5px 5px 5px"}}>
                             { JsonImports.rolePanelEdit }
                         </Button>
-                        <Button onClick={handleRemoveRole} user={props.record} style={{margin: "5px 5px 5px 5px"}} type="primary">
+                        <Button onClick={() => handleRemoveRole(props.key)} user={props.record} style={{margin: "5px 5px 5px 5px"}} type="primary">
                             { JsonImports.rolePanelRemove }
                         </Button>
                     </>
                 )
             }
         ]
+
+        return cols;
     }
 
     /*

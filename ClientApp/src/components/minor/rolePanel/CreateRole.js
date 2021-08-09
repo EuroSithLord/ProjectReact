@@ -15,19 +15,25 @@ export const CreateRole = (props) => {
             form={form} 
             onFinish={props.handleCreateFinish}
         >
-            <Form.Item name="name" label={JsonImports.createRoleLabel}>
-                <Input />
+            <Form.Item 
+                name="name" 
+                label={JsonImports.createRoleLabel}
+                rules= {[
+                    {
+                        required: true,
+                        message: JsonImports.rolePanelCreateEmptyName
+                    }
+                ]}
+            >
+                <Input allowClear />
             </Form.Item>
             <Form.Item>
-                <div style={{display: "flex", justifyContent: "space-around"}}>
+                <div style={{display: "flex", justifyContent: "space-around", marginTop: "10px"}}>
                     <Button type="primary" htmlType="submit">
                         { JsonImports.rolePanelSaveCreate }
                     </Button>
                     <Button htmlType="button" onClick={props.handleCreateCancel}>
                         { JsonImports.rolePanelCreateCancel }
-                    </Button>
-                    <Button htmlType="button" onClick={handleReset}>
-                        { JsonImports.rolePanelResetCreate }
                     </Button>
                 </div>
             </Form.Item>

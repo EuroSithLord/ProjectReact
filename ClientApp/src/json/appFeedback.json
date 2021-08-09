@@ -55,6 +55,7 @@
     "rolePanelSaveEdit": "Salvare editare",
     "rolePanelSaveCreate": "Creare rol",
     "rolePanelResetCreate": "Resetare",
+    "rolePanelCreateEmptyName": "Introduceți numele rolului",
     "editRoleSuccess": "Succes",
     "editRoleFail": "Eroare",
     "loadingHint": "Încărcare...",
@@ -99,6 +100,10 @@
     "userPanelDetailsUsername": "Nume utilizator",
     "userPanelDetailsName": "Nume",
     "userPanelDetailsEmail": "Email",
-    "userPanelDetailsRoles": "Roluri"
-
+    "userPanelDetailsRoles": "Roluri",
+    "userPanelCreateMissingFName": "Introduceți prenumele utilizatorului",
+    "userPanelCreateMissingLName": "Introduceți numele utilizatorului",
+    "userPanelCreateMissingEmail": "Introduceți email-ul utilizatorului",
+    "userPanelCreateMissingPassword": "Introduceți parola utilizatorului",
+    "userPanelCreateMissingRoles": "Introduceți rolurile utilizatorului"
 }
